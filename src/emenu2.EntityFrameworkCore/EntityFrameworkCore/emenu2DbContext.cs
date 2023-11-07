@@ -1,4 +1,4 @@
-﻿using emenu2.Core.Models;
+﻿using emenu2.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;

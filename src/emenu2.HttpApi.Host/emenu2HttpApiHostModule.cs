@@ -28,7 +28,7 @@ using Volo.Abp.Modularity;
 using Volo.Abp.Swashbuckle;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
-using emenu2.Core.Contracts;
+using emenu2.Domain.Contracts;
 using emenu2.Persistence;
 
 namespace emenu2;
@@ -71,7 +71,7 @@ public class emenu2HttpApiHostModule : AbpModule
          */
 
 
-        context.Services.AddAutoMapperObjectMapper<MyModule>();
+        context.Services.AddAutoMapperObjectMapper<emenu2ApplicationModule>();
 
         //  builder.Services.AddAutoMapperObjectMapper();
 

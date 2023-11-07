@@ -1,13 +1,8 @@
-﻿using emenu2.Core.Contracts;
-using emenu2.Core.Contracts;
-using emenu2.Core.Models;
+﻿using emenu2.Domain.Contracts;
+using emenu2.Domain.Models;
 using emenu2.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace emenu2.Persistence
 {

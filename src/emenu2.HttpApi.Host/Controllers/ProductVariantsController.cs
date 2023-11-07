@@ -1,15 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
-using emenu2.Controllers.Resources.ProductVariants;
-using emenu2.Core.Contracts;
-using emenu2.Core.Models;
-using emenu2.Core.Models.Queries;
+using emenu2.Application.Contracts.Resources.ProductVariants;
+using emenu2.Domain.Contracts;
+using emenu2.Domain.Models;
+using emenu2.Domain.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using emenu2.Core.Services;
-using emenu2.Core.Contracts;
-using emenu2.Mapping;
+using emenu2.Application.Services;
 using Volo.Abp.ObjectMapping;
 
 namespace emenu2.Controllers
@@ -20,13 +18,13 @@ namespace emenu2.Controllers
     {
         private readonly ProductVariantService _ProductVariantService;
         private readonly HelperService _helperService;
-        private readonly IObjectMapper<MyModule> _mapper;
+        private readonly IObjectMapper<emenu2ApplicationModule> _mapper;
         private readonly IUnitOfWork _unitOfWork;
 
         public ProductVariantsController(
             HelperService helperService,
             ProductVariantService ProductVariantService,
-            IObjectMapper<MyModule> mapper,
+            IObjectMapper<emenu2ApplicationModule> mapper,
             IUnitOfWork unitOfWork)
         {
             _helperService = helperService;

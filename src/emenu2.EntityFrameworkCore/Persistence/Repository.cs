@@ -1,5 +1,5 @@
-﻿using emenu2.Core.Models.Helper;
-using emenu2.Core.Models.Queries;
+﻿using emenu2.Domain.Helper;
+using emenu2.Domain.Queries;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq.Expressions;

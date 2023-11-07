@@ -1,7 +1,7 @@
-﻿using emenu2.Core.Contracts;
-using emenu2.Core.Models;
-using emenu2.Core.Models.Helper;
-using emenu2.Core.Models.Queries;
+﻿using emenu2.Domain.Contracts;
+using emenu2.Domain.Models;
+using emenu2.Domain.Helper;
+using emenu2.Domain.Queries;
 using emenu2.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

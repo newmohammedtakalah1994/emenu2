@@ -1,10 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Autofac.Core;
-using emenu2.Core.Contracts;
-using emenu2.Core.Services;
-using emenu2.Mapping;
-using emenu2.Persistence;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;

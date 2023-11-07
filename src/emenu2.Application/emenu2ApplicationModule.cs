@@ -26,6 +26,7 @@ public class emenu2ApplicationModule : AbpModule
         Configure<AbpAutoMapperOptions>(options =>
         {
             options.AddMaps<emenu2ApplicationModule>();
+            options.AddProfile<emenu2ApplicationAutoMapperProfile>();
         });
     }
 }

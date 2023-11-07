@@ -1,4 +1,4 @@
-﻿using emenu2.Core.Contracts;
+﻿using emenu2.Domain.Contracts;
 using emenu2.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
