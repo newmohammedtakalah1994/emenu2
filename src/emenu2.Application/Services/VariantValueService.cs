@@ -1,57 +1,26 @@
-﻿using emenu2.Domain.Contracts;
-using emenu2.Domain.Helper;
+﻿using emenu2.Application.Contracts.Resources.VariantValues;
 using emenu2.Domain.Models;
-using emenu2.Domain.Queries;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.Threading.Tasks;
+using System;
+using System.Linq;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Domain.Repositories;
 
 namespace emenu2.Application.Services
 {
-    public class VariantValueService : ApplicationService
+    public class VariantValueService : CrudAppService<VariantValue, VariantValueRes, Guid, PagedAndSortedResultRequestDto, CreateVariantValueRes>
     {
-        private readonly IVariantValueRepository _VariantValueRepository;
-        private readonly IUnitOfWork _unitOfWork;
-
         public VariantValueService(
-            IVariantValueRepository VariantValueRepository,
-            IUnitOfWork unitOfWork
-            )
+            IRepository<VariantValue, Guid> VariantValueRepository
+            ) : base(VariantValueRepository)
         {
-            _VariantValueRepository = VariantValueRepository;
-            _unitOfWork = unitOfWork;
-        }
 
-        public async Task<IEnumerable<VariantValue>> GetVariantValuesAsync(VariantValuesQuery filters)
+        }
+        protected override IQueryable<VariantValue> ApplyDefaultSorting(IQueryable<VariantValue> query)
         {
-            var list = await _VariantValueRepository.GetVariantValuesAsync(filters);
-            return list;
+            return query.OrderByDescending((VariantValue e) => e.ValueEn);
         }
-
-        public async Task<PagedList<VariantValue>> GetPagedVariantValuesAsync(VariantValuesQuery filters, PagingParams pagingParams)
-        {
-            var list = await _VariantValueRepository.GetPagedVariantValuesAsync(filters, pagingParams);
-            return list;
-        }
-
-        public async Task Add(VariantValue VariantValue)
-        {
-            _VariantValueRepository.Add(VariantValue);
-            await _unitOfWork.CompleteAsync();
-        }
-
-        public async Task<VariantValue> GetVariantValueByIdAsync(int id)
-        {
-            return await _VariantValueRepository.GetVariantValueByIdAsync(id);
-        }
-
-        public async Task RemoveVariantValue(VariantValue VariantValue)
-        {
-            _VariantValueRepository.Remove(VariantValue);
-            await _unitOfWork.CompleteAsync();
-        }
-
 
     }
+   
 }

@@ -78,15 +78,8 @@ public class emenu2HttpApiHostModule : AbpModule
         // builder.Services.AddAutoMapperObjectMapper(typeof(Startup));
 
         //persistance
-        context.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         context.Services.AddScoped<IProductRepository, ProductRepository>();
-
-        context.Services.AddScoped<IImageRepository, ImagesRepository>();
-
-        context.Services.AddScoped<IProductVariantRepository, ProductVariantRepository>();
-        context.Services.AddScoped<IVariantRepository, VariantRepository>();
-        context.Services.AddScoped<IVariantValueRepository, VariantValueRepository>();
 
 
         ConfigureAuthentication(context);

@@ -1,57 +1,43 @@
 ﻿using emenu2.Domain.Models;
-using emenu2.Domain.Helper;
-using emenu2.Domain.Queries;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
 using emenu2.Domain.Contracts;
+using emenu2.Application.Contracts.Resources.Products;
+using System;
+using Volo.Abp.Domain.Repositories;
+using Volo.Abp.Application.Dtos;
+using System.Linq;
+using Volo.Abp.Auditing;
+using System.Threading.Tasks;
+using Volo.Abp.Linq;
+using Polly;
+using System.Collections.Generic;
+using Volo.Abp.ObjectMapping;
 
 namespace emenu2.Application.Services
 {
-    public class ProductService : ApplicationService
+    public class ProductService : CrudAppService<Product, ProductRes, Guid, PagedAndSortedResultRequestDto, CreateProductRes>
     {
-        private readonly IProductRepository _ProductRepository;
-        private readonly IUnitOfWork _unitOfWork;
-
         public ProductService(
-            IProductRepository ProductRepository,
-            IUnitOfWork unitOfWork
-            )
+            IProductRepository ProductRepository
+            ):base(ProductRepository)
         {
-            _ProductRepository = ProductRepository;
-            _unitOfWork = unitOfWork;
+           
+        }
+        /*protected override IQueryable<Product> ApplyPaging(IQueryable<Product> query, CreateVariantValueRes input)
+        {
+            return base.ApplyPaging(query, input);
+        }*/
+        protected override IQueryable<Product> ApplyDefaultSorting(IQueryable<Product> query)
+        {
+            return query.OrderByDescending((Product e) => e.NameEn);
         }
 
-        public async Task<IEnumerable<Product>> GetProductsAsync(ProductsQuery filters)
+        public async Task<IEnumerable<ProductRes>> GetListFilterByName(String name)
         {
-            var list = await _ProductRepository.GetProductsAsync(filters);
-            return list;
+            IEnumerable<Product> products = await (Repository as IProductRepository).FilterByNameAsync(name);
+
+            IEnumerable<ProductRes> productDtos = ObjectMapper.Map<IEnumerable<Product>, IEnumerable<ProductRes>>(products);
+            return productDtos;
         }
-
-        public async Task<PagedList<Product>> GetPagedProductsAsync(ProductsQuery filters, PagingParams pagingParams)
-        {
-            var products = await _ProductRepository.GetPagedProductsAsync(filters, pagingParams);
-            return products;
-        }
-
-        public async Task Add(Product Product)
-        {
-            _ProductRepository.Add(Product);
-            await _unitOfWork.CompleteAsync();
-         
-        }
-
-        public async Task<Product> GetProductByIdAsync(int id)
-        {
-            return await _ProductRepository.GetProductByIdAsync(id);
-        }
-
-        public async Task RemoveProduct(Product Product)
-        {
-            _ProductRepository.Remove(Product);
-            await _unitOfWork.CompleteAsync();
-        }
-
-
     }
 }

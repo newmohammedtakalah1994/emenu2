@@ -52,13 +52,6 @@ public class emenu2ApplicationAutoMapperProfile : Profile
         CreateMap<Variant, VariantRes>();
 
 
-        CreateMap<PagingInfoRes, PagingInfo>();
-        CreateMap<PagingInfo, PagingInfoRes>();
-
-        
-
-
-
         CreateMap<CreateVariantValueRes, VariantValue>();
 
         CreateMap<UpdateVariantValueRes, VariantValue>();

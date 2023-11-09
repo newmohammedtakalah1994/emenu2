@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using emenu2.Application.Services;
 using Volo.Abp.ObjectMapping;
+using System;
 
 namespace emenu2.Controllers
 {
@@ -17,53 +18,22 @@ namespace emenu2.Controllers
     public class ProductVariantsController : ControllerBase
     {
         private readonly ProductVariantService _ProductVariantService;
-        private readonly HelperService _helperService;
-        private readonly IObjectMapper<emenu2ApplicationModule> _mapper;
-        private readonly IUnitOfWork _unitOfWork;
-
+  
         public ProductVariantsController(
-            HelperService helperService,
-            ProductVariantService ProductVariantService,
-            IObjectMapper<emenu2ApplicationModule> mapper,
-            IUnitOfWork unitOfWork)
-        {
-            _helperService = helperService;
+                ProductVariantService ProductVariantService)
+            {
             _ProductVariantService = ProductVariantService;
-            _mapper = mapper;
-            _unitOfWork = unitOfWork;
-        }
+           }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProductVariantRes>>> GetProductVariants([FromQuery]ProductVariantQuery filters)
-        {
-            var ProductVariants = await _ProductVariantService.GetProductVariantsAsync(filters);
-
-            var results = _mapper.Map<IEnumerable<ProductVariant>, IEnumerable<ProductVariantRes>>(ProductVariants);
-            return Ok(results);
-        }
-
-
-        
-        [HttpGet("paged")]
-        //return ProductVariants for dashboard
-        public async Task<ActionResult> GetPagedProductVariantsAsync([FromQuery]ProductVariantQuery filters, [FromQuery]PagingParams pagingParams)
-        {
-            var ProductVariants = await _ProductVariantService.GetPagedProductVariantsAsync(filters, pagingParams);
-            var result = _helperService.ToPageListResource<ProductVariant, ProductVariantRes>(ProductVariants);
-
-            return Ok(result);
-        }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetProductVariantById(int id)
+        public async Task<ActionResult> GetProductVariantById(Guid id)
         {
-            var ProductVariant = await _ProductVariantService.GetProductVariantByIdAsync(id);
+            var ProductVariant = await _ProductVariantService.GetAsync(id);
             if (ProductVariant == null)
                 return NotFound("ProductVariant is not found");
 
-            var result = _mapper.Map<ProductVariant, ProductVariantRes>(ProductVariant);
-
-            return Ok(result);
+            return Ok(ProductVariant);
         }
 
         
@@ -73,31 +43,18 @@ namespace emenu2.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            ProductVariant ProductVariant = _mapper.Map<CreateProductVariantRes, ProductVariant>(resource);
-
-            await _ProductVariantService.Add(ProductVariant);
+     
+            await _ProductVariantService.CreateAsync(resource);
 
             return Ok();
         }
 
         
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateProductVariant([FromRoute] int id, [FromBody] UpdateProductVariantRes resource)
+        public async Task<ActionResult> UpdateProductVariant([FromRoute] Guid id, [FromBody] CreateProductVariantRes resource)
         {
-            var ProductVariant = await _ProductVariantService.GetProductVariantByIdAsync(id);
-            if (ProductVariant == null)
-                return NotFound("ProductVariant is not found");
-
-            if(resource.ProductId == null)
-            {
-                resource.ProductId = ProductVariant.ProductId;
-            }
-
-
-            _mapper.Map(resource, ProductVariant);
-
-            await _unitOfWork.CompleteAsync();
-
+            var ProductVariant = await _ProductVariantService.UpdateAsync(id,resource);
+          
             return Ok();
         }
 
@@ -106,14 +63,10 @@ namespace emenu2.Controllers
     
         
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteProductVariant([FromRoute] int id)
+        public async Task<ActionResult> DeleteProductVariant([FromRoute] Guid id)
         {
-            var ProductVariant = await _ProductVariantService.GetProductVariantByIdAsync(id);
-            if (ProductVariant == null)
-                return NotFound("ProductVariant is not found");
-
-            await _ProductVariantService.RemoveProductVariant(ProductVariant);
-
+             await _ProductVariantService.DeleteAsync(id);
+            
             return Ok();
         }
 

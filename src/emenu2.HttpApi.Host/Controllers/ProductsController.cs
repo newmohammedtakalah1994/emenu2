@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using emenu2.Application.Services;
 using Volo.Abp.ObjectMapping;
+using System;
 
 namespace emenu2.Controllers
 {
@@ -17,53 +18,18 @@ namespace emenu2.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly ProductService _productService;
-        private readonly HelperService _helperService;
-        private readonly IObjectMapper<emenu2ApplicationModule> _mapper;
-        private readonly IUnitOfWork _unitOfWork;
-
         public ProductsController(
-            HelperService helperService,
-            ProductService ProductService,
-            IObjectMapper<emenu2ApplicationModule> mapper,
-            IUnitOfWork unitOfWork)
+            ProductService ProductService)
         {
-            _helperService = helperService;
             _productService = ProductService;
-            _mapper = mapper;
-            _unitOfWork = unitOfWork;
+            
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProductRes>>> GetProducts([FromQuery]ProductsQuery filters)
+        [HttpGet("filter{name}")]
+        public async Task<ActionResult> GetProductsFilterByName(string name)
         {
-            var products = await _productService.GetProductsAsync(filters);
-
-            var results = _mapper.Map<IEnumerable<Product>, IEnumerable<ProductRes>>(products);
-            return Ok(results);
-        }
-
-
-        
-        [HttpGet("paged")]
-        //return Products for dashboard
-        public async Task<ActionResult> GetPagedProductsAsync([FromQuery]ProductsQuery filters, [FromQuery]PagingParams pagingParams)
-        {
-            var Products = await _productService.GetPagedProductsAsync(filters, pagingParams);
-            var result = _helperService.ToPageListResource<Product, ProductRes>(Products);
-
-            return Ok(result);
-        }
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult> GetProductById(int id)
-        {
-            var Product = await _productService.GetProductByIdAsync(id);
-            if (Product == null)
-                return NotFound("Product is not found");
-
-            var result = _mapper.Map<Product, ProductRes>(Product);
-
-            return Ok(result);
+            var Product = await _productService.GetListFilterByName(name); 
+            return Ok(Product);
         }
 
      
@@ -73,59 +39,28 @@ namespace emenu2.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            Product Product = _mapper.Map<CreateProductRes, Product>(resource);
-
-            await _productService.Add(Product);
+        
+            await _productService.CreateAsync(resource);
 
             return Ok();
         }
 
       
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateProduct([FromRoute] int id, [FromBody] UpdateProductRes resource)
+        public async Task<ActionResult> UpdateProduct([FromRoute] Guid id, [FromBody] CreateProductRes resource)
         {
-            var Product = await _productService.GetProductByIdAsync(id);
+            var Product = await _productService.UpdateAsync(id, resource);
             if (Product == null)
                 return NotFound("Product is not found");
-
-            if(resource.NameEn == null)
-            {
-                resource.NameEn = Product.NameEn;
-            }
-            if (resource.NameAr == null)
-            {
-                resource.NameAr = Product.NameAr;
-            }
-            if (resource.DescEn == null)
-            {
-                resource.DescEn = Product.DescEn;
-            }
-            if (resource.DescAr == null)
-            {
-                resource.DescAr = Product.DescAr;
-            }
-            if (resource.ImageId == null)
-            {
-                resource.ImageId = Product.ImageId;
-            }
-           
-
-            _mapper.Map(resource, Product);
-
-            await _unitOfWork.CompleteAsync();
 
             return Ok();
         }
         
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteProduct([FromRoute] int id)
+        public async Task<ActionResult> DeleteProduct([FromRoute] Guid id)
         {
-            var Product = await _productService.GetProductByIdAsync(id);
-            if (Product == null)
-                return NotFound("Product is not found");
-
-            await _productService.RemoveProduct(Product);
-
+             await _productService.DeleteAsync(id);
+         
             return Ok();
         }
 

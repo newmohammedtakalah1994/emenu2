@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Volo.Abp.Domain.Repositories;
 
 namespace emenu2.Controllers
 {
@@ -19,16 +20,12 @@ namespace emenu2.Controllers
     public class ImagesController : ControllerBase
     {
         private IWebHostEnvironment _hostingEnvironment;
-        private IImageRepository _imageRepository;
-        private IUnitOfWork _unitOfWork;
         public ImagesController(
-                IWebHostEnvironment hostingEnvironment,
-                IImageRepository    imageRepository,
-                IUnitOfWork unitOfWork)
+                IWebHostEnvironment hostingEnvironment
+               )
         {
             _hostingEnvironment = hostingEnvironment;
-            _imageRepository = imageRepository;
-            _unitOfWork = unitOfWork;
+            
         }
 
         [HttpPost("Upload")]
@@ -42,16 +39,9 @@ namespace emenu2.Controllers
                 await image.CopyToAsync(stream);
             }
 
-            Image image1 = new Image()
-            {
-                ImageInDb = null,
-                ImageUrl = "images/" + image.FileName
-            };
 
-               _imageRepository.AddImage(image1);
-               await _unitOfWork.CompleteAsync();
-
-               return Ok(new { imageId = image1.Id  , imageUrl = image1.ImageUrl});
+            //new { imageId = image1.Id  , imageUrl = image1.ImageUrl}
+            return Ok();
            // return Ok();
         }
     }

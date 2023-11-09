@@ -1,56 +1,25 @@
-﻿using emenu2.Domain.Contracts;
-using emenu2.Domain.Helper;
+﻿using emenu2.Application.Contracts.Resources.Variants;
 using emenu2.Domain.Models;
 using emenu2.Domain.Queries;
+using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Domain.Repositories;
 
 namespace emenu2.Application.Services
 {
-    public class VariantService : ApplicationService
+    public class VariantService : CrudAppService<Variant, VariantRes, Guid, PagedAndSortedResultRequestDto, CreateVariantRes>
     {
-        private readonly IVariantRepository _VariantRepository;
-        private readonly IUnitOfWork _unitOfWork;
-
         public VariantService(
-            IVariantRepository VariantRepository,
-            IUnitOfWork unitOfWork
-            )
+            IRepository<Variant, Guid> VariantRepository
+            ) : base(VariantRepository)
         {
-            _VariantRepository = VariantRepository;
-            _unitOfWork = unitOfWork;
+
         }
 
-        public async Task<IEnumerable<Variant>> GetVariantsAsync(VariantsQuery filters)
-        {
-            var list = await _VariantRepository.GetVariantsAsync(filters);
-            return list;
-        }
-
-        public async Task<PagedList<Variant>> GetPagedVariantsAsync(VariantsQuery filters, PagingParams pagingParams)
-        {
-            var list = await _VariantRepository.GetPagedVariantsAsync(filters, pagingParams);
-            return list;
-        }
-        public async Task Add(Variant Variant)
-        {
-            _VariantRepository.Add(Variant);
-            await _unitOfWork.CompleteAsync();
-        ;
-        }
-
-        public async Task<Variant> GetVariantByIdAsync(int id)
-        {
-            return await _VariantRepository.GetVariantByIdAsync(id);
-        }
-
-        public async Task RemoveVariant(Variant Variant)
-        {
-            _VariantRepository.Remove(Variant);
-            await _unitOfWork.CompleteAsync();
-        }
 
 
     }
