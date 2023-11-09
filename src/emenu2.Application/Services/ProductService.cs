@@ -39,5 +39,15 @@ namespace emenu2.Application.Services
             IEnumerable<ProductRes> productDtos = ObjectMapper.Map<IEnumerable<Product>, IEnumerable<ProductRes>>(products);
             return productDtos;
         }
+
+        public async Task<IEnumerable<ProductRes>> GetListFilterByNamePagintion(String name,PagedAndSortedResultRequestDto paged)
+        {
+            //does here I need to write all query by my self or I can use pagnation from user to call any function from base service
+
+            IEnumerable<Product> products = await (Repository as IProductRepository).FilterByNameAsync(name);
+
+            IEnumerable<ProductRes> productDtos = ObjectMapper.Map<IEnumerable<Product>, IEnumerable<ProductRes>>(products);
+            return productDtos;
+        }
     }
 }

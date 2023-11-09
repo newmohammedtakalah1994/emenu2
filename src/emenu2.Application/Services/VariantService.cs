@@ -1,6 +1,6 @@
 ﻿using emenu2.Application.Contracts.Resources.Variants;
 using emenu2.Domain.Models;
-using emenu2.Domain.Queries;
+ 
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;

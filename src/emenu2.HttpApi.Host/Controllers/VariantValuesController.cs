@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using emenu2.Domain.Contracts;
 using emenu2.Domain.Models;
-using emenu2.Domain.Queries;
+ 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using emenu2.Application.Services;

@@ -5,7 +5,7 @@ using emenu2.Application.Contracts.Resources.ProductVariants;
 using emenu2.Application.Contracts.Resources.Variants;
 using emenu2.Application.Contracts.Resources.VariantValues;
 using emenu2.Domain.Models;
-using emenu2.Domain.Queries;
+ 
 
 namespace emenu2;
 

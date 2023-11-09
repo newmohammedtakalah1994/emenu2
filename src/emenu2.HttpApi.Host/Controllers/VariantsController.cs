@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using emenu2.Domain.Contracts;
 using emenu2.Domain.Models;
-using emenu2.Domain.Queries;
+ 
 using Microsoft.AspNetCore.Mvc;
 using emenu2.Application.Services;
 using Volo.Abp.ObjectMapping;

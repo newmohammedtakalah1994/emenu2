@@ -4,12 +4,13 @@ using AutoMapper;
 using emenu2.Application.Contracts.Resources.Products;
 using emenu2.Domain.Contracts;
 using emenu2.Domain.Models;
-using emenu2.Domain.Queries;
+ 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using emenu2.Application.Services;
 using Volo.Abp.ObjectMapping;
 using System;
+using Volo.Abp.Application.Dtos;
 
 namespace emenu2.Controllers
 {
@@ -32,7 +33,17 @@ namespace emenu2.Controllers
             return Ok(Product);
         }
 
-     
+
+        [HttpGet("paged")]
+        //return Products for dashboard
+        public async Task<ActionResult> GetPagedProductsAsync([FromQuery] PagedAndSortedResultRequestDto pagingParams)
+        {
+            var Products = await _productService.GetListAsync(pagingParams);
+           
+            return Ok(Products);
+        }
+
+
         [HttpPost]
         public async Task<ActionResult> CreateProduct([FromBody] CreateProductRes resource)
         {
