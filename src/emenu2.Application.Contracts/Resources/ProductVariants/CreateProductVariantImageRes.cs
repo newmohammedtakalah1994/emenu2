@@ -6,7 +6,7 @@ using Volo.Abp.Application.Dtos;
 
 namespace emenu2.Application.Contracts.Resources.ProductVariants
 {
-    public class CreateProductVariantImageRes : EntityDto<Guid>
+    public class CreateProductVariantImageRes : EntityDto
     {
         public Guid? ImageId { get; set; }
     }

@@ -12,10 +12,13 @@ using Volo.Abp.Linq;
 using Polly;
 using System.Collections.Generic;
 using Volo.Abp.ObjectMapping;
+using emenu2.Resources.Products;
+using System.Xml.Linq;
+using Volo.Abp;
 
 namespace emenu2.Application.Services
 {
-    public class ProductService : CrudAppService<Product, ProductRes, Guid, PagedAndSortedResultRequestDto, CreateProductRes>
+    public class ProductService : CrudAppService<Product, ProductRes, Guid, FilterPagedProductDto, CreateProductRes>
     {
         public ProductService(
             IProductRepository ProductRepository
@@ -23,31 +26,56 @@ namespace emenu2.Application.Services
         {
            
         }
-        /*protected override IQueryable<Product> ApplyPaging(IQueryable<Product> query, CreateVariantValueRes input)
+
+
+        public override async Task<ProductRes> UpdateAsync(Guid id, CreateProductRes input)
         {
-            return base.ApplyPaging(query, input);
-        }*/
+            await CheckUpdatePolicyAsync();
+
+            if (input.NameAr == null && input.NameEn == null)
+                throw new BusinessException("you can't put bothe name is null");
+            var entity = await GetEntityByIdAsync(id);
+            //TODO: Check if input has id different than given id and normalize if it's default value, throw ex otherwise
+            await MapToEntityAsync(input, entity);
+            await Repository.UpdateAsync(entity, autoSave: true);
+
+            return await MapToGetOutputDtoAsync(entity);
+        }
+
+        public override async Task<ProductRes> CreateAsync(CreateProductRes input)
+        {
+            await CheckCreatePolicyAsync();
+
+            var entity = await MapToEntityAsync(input);
+
+            if (input.NameAr == null && input.NameEn == null)
+                throw new BusinessException("you can't put bothe name is null");
+
+            TryToSetTenantId(entity);
+
+            await Repository.InsertAsync(entity, autoSave: true);
+
+            return await MapToGetOutputDtoAsync(entity);
+        }
+
         protected override IQueryable<Product> ApplyDefaultSorting(IQueryable<Product> query)
         {
             return query.OrderByDescending((Product e) => e.NameEn);
         }
 
-        public async Task<IEnumerable<ProductRes>> GetListFilterByName(String name)
+        public override Task<PagedResultDto<ProductRes>> GetListAsync(FilterPagedProductDto input)
         {
-            IEnumerable<Product> products = await (Repository as IProductRepository).FilterByNameAsync(name);
-
-            IEnumerable<ProductRes> productDtos = ObjectMapper.Map<IEnumerable<Product>, IEnumerable<ProductRes>>(products);
-            return productDtos;
+            return base.GetListAsync(input);
         }
 
-        public async Task<IEnumerable<ProductRes>> GetListFilterByNamePagintion(String name,PagedAndSortedResultRequestDto paged)
+        protected override Task<IQueryable<Product>> CreateFilteredQueryAsync(FilterPagedProductDto input)
         {
-            //does here I need to write all query by my self or I can use pagnation from user to call any function from base service
-
-            IEnumerable<Product> products = await (Repository as IProductRepository).FilterByNameAsync(name);
-
-            IEnumerable<ProductRes> productDtos = ObjectMapper.Map<IEnumerable<Product>, IEnumerable<ProductRes>>(products);
-            return productDtos;
+            IQueryable<Product> query =   Repository.GetQueryableAsync().Result;
+            query = query.WhereIf(input.NameEn!=null, t => t.NameEn == input.NameEn)
+                .WhereIf(input.NameAr != null, t => t.NameAr == input.NameAr);
+            return  Task.FromResult(query);
+           // return base.CreateFilteredQueryAsync(input);
         }
+
     }
 }

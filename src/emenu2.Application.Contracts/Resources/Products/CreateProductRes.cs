@@ -8,7 +8,7 @@ using Volo.Abp.Application.Dtos;
 
 namespace emenu2.Application.Contracts.Resources.Products
 {
-    public class CreateProductRes :EntityDto<Guid>
+    public class CreateProductRes :EntityDto
     {
         public string? NameEn { get; set; }
         public string? NameAr { get; set; }

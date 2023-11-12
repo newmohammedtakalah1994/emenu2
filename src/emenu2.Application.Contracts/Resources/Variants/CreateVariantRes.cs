@@ -7,7 +7,7 @@ using Volo.Abp.Application.Dtos;
 
 namespace emenu2.Application.Contracts.Resources.Variants
 {
-    public class CreateVariantRes : EntityDto<Guid>
+    public class CreateVariantRes : EntityDto
     {
       //  public int Id { get; set; }
         public string? NameEn { get; set; }

@@ -13,8 +13,8 @@ using emenu2.EntityFrameworkCore;
 namespace emenu2.Migrations
 {
     [DbContext(typeof(emenu2DbContext))]
-    [Migration("20231108114211_emenuv3")]
-    partial class emenuv3
+    [Migration("20231112100759_emenu4")]
+    partial class emenu4
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1829,10 +1829,7 @@ namespace emenu2.Migrations
                     b.Property<string>("DescEn")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ImageId")
-                        .HasColumnType("int");
-
-                    b.Property<Guid?>("ImageId1")
+                    b.Property<Guid?>("ImageId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsDeleted")
@@ -1857,7 +1854,7 @@ namespace emenu2.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ImageId1");
+                    b.HasIndex("ImageId");
 
                     b.ToTable("Products");
                 });
@@ -2300,7 +2297,7 @@ namespace emenu2.Migrations
                 {
                     b.HasOne("emenu2.Domain.Models.Image", "Image")
                         .WithMany()
-                        .HasForeignKey("ImageId1");
+                        .HasForeignKey("ImageId");
 
                     b.Navigation("Image");
                 });

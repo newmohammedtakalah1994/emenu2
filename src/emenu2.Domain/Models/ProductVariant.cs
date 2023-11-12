@@ -12,9 +12,9 @@ namespace emenu2.Domain.Models
      //   public int Id { get; set; }
         public Guid? ProductId { get; set; }
         public Product? Product { get; set; }
-        public ICollection<ProductDetails>? ProductDetails { get; set; }
+        public ICollection<ProductDetails> ProductDetails { get; set; }
 
-        public ICollection<ProductVariantImage>? ProductVariantImages { get; set; }
+        public ICollection<ProductVariantImage> ProductVariantImages { get; set; }
         protected ProductVariant()
         {
 

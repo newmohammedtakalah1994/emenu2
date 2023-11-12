@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace emenu2.Migrations
 {
     /// <inheritdoc />
-    public partial class emenuv3 : Migration
+    public partial class emenu4 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -731,8 +731,7 @@ namespace emenu2.Migrations
                     NameAr = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DescEn = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DescAr = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ImageId = table.Column<int>(type: "int", nullable: true),
-                    ImageId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ImageId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -745,8 +744,8 @@ namespace emenu2.Migrations
                 {
                     table.PrimaryKey("PK_Products", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Products_Images_ImageId1",
-                        column: x => x.ImageId1,
+                        name: "FK_Products_Images_ImageId",
+                        column: x => x.ImageId,
                         principalTable: "Images",
                         principalColumn: "Id");
                 });
@@ -1236,9 +1235,9 @@ namespace emenu2.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Products_ImageId1",
+                name: "IX_Products_ImageId",
                 table: "Products",
-                column: "ImageId1");
+                column: "ImageId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductVariantImage_ImageId",
