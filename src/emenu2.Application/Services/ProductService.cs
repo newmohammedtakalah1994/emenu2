@@ -33,7 +33,7 @@ namespace emenu2.Application.Services
             _localizer = localizer;
         }
 
-
+        // [Authorize("ProductStore_Author_Create")]
         public override async Task<ProductDto> UpdateAsync(Guid id, CreateUpdateProductDto input)
         {
             await CheckUpdatePolicyAsync();
@@ -52,7 +52,8 @@ namespace emenu2.Application.Services
             return await MapToGetOutputDtoAsync(entity);
         }
 
-        [Authorize("ProductStore_Author_Create")]
+       
+        [AllowAnonymous]
         public override async Task<ProductDto> CreateAsync(CreateUpdateProductDto input)
         {
 
