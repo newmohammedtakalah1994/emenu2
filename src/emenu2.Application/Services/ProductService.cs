@@ -15,10 +15,12 @@ using Volo.Abp.ObjectMapping;
 using emenu2.Resources.Products;
 using System.Xml.Linq;
 using Volo.Abp;
+using Microsoft.AspNetCore.Authorization;
 
 namespace emenu2.Application.Services
 {
-    public class ProductService : CrudAppService<Product, ProductRes, Guid, FilterPagedProductDto, CreateProductRes>
+    [Authorize]
+    public class ProductService : CrudAppService<Product, ProductDto, Guid, FilterPagedProductDto, CreateUpdateProductDto>
     {
         public ProductService(
             IProductRepository ProductRepository
@@ -28,11 +30,11 @@ namespace emenu2.Application.Services
         }
 
 
-        public override async Task<ProductRes> UpdateAsync(Guid id, CreateProductRes input)
+        public override async Task<ProductDto> UpdateAsync(Guid id, CreateUpdateProductDto input)
         {
             await CheckUpdatePolicyAsync();
 
-            if (input.NameAr == null && input.NameEn == null)
+            if (input.NameAr.IsNullOrWhiteSpace()  && input.NameEn.IsNullOrWhiteSpace() )
                 throw new BusinessException("you can't put bothe name is null");
             var entity = await GetEntityByIdAsync(id);
             //TODO: Check if input has id different than given id and normalize if it's default value, throw ex otherwise
@@ -42,13 +44,15 @@ namespace emenu2.Application.Services
             return await MapToGetOutputDtoAsync(entity);
         }
 
-        public override async Task<ProductRes> CreateAsync(CreateProductRes input)
+        [Authorize("ProductStore_Author_Create")]
+        public override async Task<ProductDto> CreateAsync(CreateUpdateProductDto input)
         {
+
             await CheckCreatePolicyAsync();
 
             var entity = await MapToEntityAsync(input);
 
-            if (input.NameAr == null && input.NameEn == null)
+            if (input.NameAr.IsNullOrWhiteSpace() && input.NameEn.IsNullOrWhiteSpace())
                 throw new BusinessException("you can't put bothe name is null");
 
             TryToSetTenantId(entity);
@@ -63,17 +67,23 @@ namespace emenu2.Application.Services
             return query.OrderByDescending((Product e) => e.NameEn);
         }
 
-        public override Task<PagedResultDto<ProductRes>> GetListAsync(FilterPagedProductDto input)
+        public override Task<PagedResultDto<ProductDto>> GetListAsync(FilterPagedProductDto input)
         {
             return base.GetListAsync(input);
         }
 
-        protected override Task<IQueryable<Product>> CreateFilteredQueryAsync(FilterPagedProductDto input)
+        [AllowAnonymous]
+        public override Task<ProductDto> GetAsync(Guid id)
         {
-            IQueryable<Product> query =   Repository.GetQueryableAsync().Result;
-            query = query.WhereIf(input.NameEn!=null, t => t.NameEn == input.NameEn)
-                .WhereIf(input.NameAr != null, t => t.NameAr == input.NameAr);
-            return  Task.FromResult(query);
+            return base.GetAsync(id);
+        }
+
+        protected override async Task<IQueryable<Product>> CreateFilteredQueryAsync(FilterPagedProductDto input)
+        {
+            IQueryable<Product> query =   await Repository.GetQueryableAsync();
+            query = query.WhereIf(!input.NameEn.IsNullOrWhiteSpace(), t => t.NameEn == input.NameEn)
+                .WhereIf(!input.NameAr.IsNullOrWhiteSpace(), t => t.NameAr == input.NameAr);
+            return  query;
            // return base.CreateFilteredQueryAsync(input);
         }
 

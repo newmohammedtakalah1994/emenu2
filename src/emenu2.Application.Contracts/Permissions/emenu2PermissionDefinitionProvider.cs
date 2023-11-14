@@ -10,7 +10,8 @@ public class emenu2PermissionDefinitionProvider : PermissionDefinitionProvider
     {
         var myGroup = context.AddGroup(emenu2Permissions.GroupName);
         //Define your own permissions here. Example:
-        //myGroup.AddPermission(emenu2Permissions.MyPermission1, L("Permission:MyPermission1"));
+       //   myGroup.AddPermission(emenu2Permissions.MyPermission1, L("Permission:ProductStore_Author_Create"));
+          myGroup.AddPermission("ProductStore_Author_Create");
     }
 
     private static LocalizableString L(string name)

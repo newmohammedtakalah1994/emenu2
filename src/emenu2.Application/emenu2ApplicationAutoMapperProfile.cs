@@ -13,50 +13,46 @@ public class emenu2ApplicationAutoMapperProfile : Profile
 {
     public emenu2ApplicationAutoMapperProfile()
     {
-        CreateMap<CreateProductRes, Product>();
+        CreateMap<CreateUpdateProductDto, Product>();
 
-        CreateMap<UpdateProductRes, Product>();
+        CreateMap<Product, ProductDto>();
 
-        CreateMap<Product, ProductRes>();
-
-        CreateMap<ImageRes, Image>();
-        CreateMap<Image, ImageRes>();
+        CreateMap<ImageDto, Image>();
+        CreateMap<Image, ImageDto>();
 
 
-        CreateMap<CreateProductImageRes, ProductImage>();
-        CreateMap<ProductImage, ProductImageRes>();
+        CreateMap<CreateUpdateProductImageDto, ProductImage>();
+        CreateMap<ProductImage, ProductImageDto>();
 
 
 
-        CreateMap<CreateProductVariantRes, ProductVariant>();
+        CreateMap<CreateUpdateProductVariantInProductDto, ProductVariant>();
 
-        CreateMap<UpdateProductVariantRes, ProductVariant>();
-
-        CreateMap<ProductVariant, ProductVariantRes>();
+        CreateMap<CreateUpdateProductVariantDto, ProductVariant>();
 
 
-        CreateMap<ProductDetails, ProductDetailsRes>();
-
-        CreateMap<CreateProductDetailsRes, ProductDetails>();
+        CreateMap<ProductVariant, ProductVariantResDto>();
 
 
-        CreateMap<CreateProductVariantImageRes, ProductVariantImage>();
-        CreateMap<ProductVariantImage, ProductVariantImageRes>();
+        CreateMap<ProductDetails, ProductDetailsDto>();
+
+        CreateMap<CreateUpdateProductDetailsDto, ProductDetails>();
+
+
+        CreateMap<CreateProductVariantImageDto, ProductVariantImage>();
+        CreateMap<ProductVariantImage, ProductVariantImageDto>();
 
 
 
-        CreateMap<CreateVariantRes, Variant>();
+        CreateMap<CreateUpdateVariantDto, Variant>();
 
-        CreateMap<UpdateVariantRes, Variant>();
+        
+        CreateMap<Variant, VariantDto>();
 
-        CreateMap<Variant, VariantRes>();
 
+        CreateMap<CreateUpdateVariantValueDto, VariantValue>();
 
-        CreateMap<CreateVariantValueRes, VariantValue>();
-
-        CreateMap<UpdateVariantValueRes, VariantValue>();
-
-        CreateMap<VariantValue, VariantValueRes>();
+        CreateMap<VariantValue, VariantValueDto>();
 
         /* You can configure your AutoMapper mapping configuration here.
          * Alternatively, you can split your mapping configurations

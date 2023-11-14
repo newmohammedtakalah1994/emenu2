@@ -9,7 +9,7 @@ namespace emenu2.Resources.Products
     
     public  class FilterPagedProductDto :PagedAndSortedResultRequestDto
     {
-        public String? NameEn { get; set; }
-        public String? NameAr{ get; set; }
+        public string? NameEn { get; set; }
+        public string? NameAr{ get; set; }
     }
 }

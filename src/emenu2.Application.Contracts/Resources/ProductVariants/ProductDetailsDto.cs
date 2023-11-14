@@ -7,11 +7,11 @@ using Volo.Abp.Application.Dtos;
 
 namespace emenu2.Application.Contracts.Resources.ProductVariants
 {
-    public class ProductDetailsRes: FullAuditedEntityDto<Guid>
+    public class ProductDetailsDto: FullAuditedEntityDto<Guid>
     {
       //  public int Id { get; set; }
         public Guid? ProductVariantId { get; set; }
         public Guid? VariantValueId { get; set; }
-        public VariantValueRes? VariantValue { get; set; }
+        public VariantValueDto? VariantValue { get; set; }
     }
 }

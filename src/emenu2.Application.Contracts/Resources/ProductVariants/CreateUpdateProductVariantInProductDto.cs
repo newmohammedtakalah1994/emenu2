@@ -7,13 +7,13 @@ using Volo.Abp.Application.Dtos;
 
 namespace emenu2.Application.Contracts.Resources.ProductVariants
 {
-    public class CreateProductVariantRes : EntityDto
+    public class CreateUpdateProductVariantInProductDto : EntityDto
     {
       
       //  public int ProductId { get; set; }
 
-        public ICollection<CreateProductDetailsRes>? ProductDetails { get; set; }
+        public ICollection<CreateUpdateProductDetailsDto>? ProductDetails { get; set; }
 
-        public ICollection<CreateProductVariantImageRes>? ProductVariantImages { get; set; }
+        public ICollection<CreateProductVariantImageDto>? ProductVariantImages { get; set; }
     }
 }

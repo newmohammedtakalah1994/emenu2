@@ -7,7 +7,7 @@ using Volo.Abp.Content;
 
 namespace emenu2.Application.Contracts.Resources
 {
-    public class ImageRes : FullAuditedEntityDto<Guid>
+    public class CreateUpdateImageDto : FullAuditedEntityDto<Guid>
     {
 
       //  public Guid? Id { get; set; }

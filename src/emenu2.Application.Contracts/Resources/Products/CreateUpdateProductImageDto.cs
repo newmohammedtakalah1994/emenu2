@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 
-namespace emenu2.Application.Contracts.Resources.ProductVariants
+namespace emenu2.Application.Contracts.Resources.Products
 {
-    public class CreateProductVariantImageRes : EntityDto
+    public class CreateUpdateProductImageDto : EntityDto
     {
         public Guid? ImageId { get; set; }
     }

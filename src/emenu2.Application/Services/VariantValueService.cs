@@ -8,7 +8,7 @@ using Volo.Abp.Domain.Repositories;
 
 namespace emenu2.Application.Services
 {
-    public class VariantValueService : CrudAppService<VariantValue, VariantValueRes, Guid, PagedAndSortedResultRequestDto, CreateVariantValueRes>
+    public class VariantValueService : CrudAppService<VariantValue, VariantValueDto, Guid, PagedAndSortedResultRequestDto, CreateUpdateVariantValueDto>
     {
         public VariantValueService(
             IRepository<VariantValue, Guid> VariantValueRepository

@@ -9,7 +9,7 @@ using Volo.Abp.Domain.Repositories;
 
 namespace emenu2.Application.Services
 {
-    public class ProductVariantService : CrudAppService<ProductVariant, ProductVariantRes, Guid, PagedAndSortedResultRequestDto, CreateProductVariantRes>
+    public class ProductVariantService : CrudAppService<ProductVariant, ProductVariantResDto, Guid, PagedAndSortedResultRequestDto, CreateUpdateProductVariantDto>
     {
         public ProductVariantService(
             IRepository<ProductVariant, Guid> ProductVariantRepository
