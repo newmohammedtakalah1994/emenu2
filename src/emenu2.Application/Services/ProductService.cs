@@ -16,17 +16,21 @@ using emenu2.Resources.Products;
 using System.Xml.Linq;
 using Volo.Abp;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Localization;
+using emenu2.Localization;
 
 namespace emenu2.Application.Services
 {
     [Authorize]
     public class ProductService : CrudAppService<Product, ProductDto, Guid, FilterPagedProductDto, CreateUpdateProductDto>
     {
+        private readonly IStringLocalizer<emenu2Resource> _localizer;
         public ProductService(
-            IProductRepository ProductRepository
-            ):base(ProductRepository)
+            IProductRepository ProductRepository,
+            IStringLocalizer<emenu2Resource> localizer
+            ) :base(ProductRepository)
         {
-           
+            _localizer = localizer;
         }
 
 
@@ -34,8 +38,12 @@ namespace emenu2.Application.Services
         {
             await CheckUpdatePolicyAsync();
 
-            if (input.NameAr.IsNullOrWhiteSpace()  && input.NameEn.IsNullOrWhiteSpace() )
-                throw new BusinessException("you can't put bothe name is null");
+            if (input.NameAr.IsNullOrWhiteSpace() && input.NameEn.IsNullOrWhiteSpace())
+            {
+                var strExceptionNameEmpty = _localizer["exceptionNameEmpty"];
+                throw new BusinessException(strExceptionNameEmpty);
+            }
+               
             var entity = await GetEntityByIdAsync(id);
             //TODO: Check if input has id different than given id and normalize if it's default value, throw ex otherwise
             await MapToEntityAsync(input, entity);
@@ -53,7 +61,10 @@ namespace emenu2.Application.Services
             var entity = await MapToEntityAsync(input);
 
             if (input.NameAr.IsNullOrWhiteSpace() && input.NameEn.IsNullOrWhiteSpace())
-                throw new BusinessException("you can't put bothe name is null");
+            {
+                var strExceptionNameEmpty = _localizer["exceptionNameEmpty"];
+                throw new BusinessException(strExceptionNameEmpty);
+            }
 
             TryToSetTenantId(entity);
 
