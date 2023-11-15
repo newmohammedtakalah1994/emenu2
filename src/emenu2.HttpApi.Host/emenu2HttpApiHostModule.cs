@@ -167,8 +167,8 @@ public class emenu2HttpApiHostModule : AbpModule
                 options.SwaggerDoc("v1", new OpenApiInfo { Title = "emenu2 API", Version = "v1" });
                 options.DocInclusionPredicate((docName, description) => true);
                 options.CustomSchemaIds(type => type.FullName);
-                options.OperationFilter<CustomHeaderSwaggerAttribute>();
-                //c.OperationFilter<CustomHeaderSwaggerAttribute>();
+          //      options.OperationFilter<CustomHeaderSwaggerAttribute>();
+            
             });
     }
 

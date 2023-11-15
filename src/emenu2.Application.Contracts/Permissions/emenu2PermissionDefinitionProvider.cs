@@ -1,4 +1,5 @@
 ﻿using emenu2.Localization;
+using System.Text.RegularExpressions;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Localization;
 
@@ -8,10 +9,15 @@ public class emenu2PermissionDefinitionProvider : PermissionDefinitionProvider
 {
     public override void Define(IPermissionDefinitionContext context)
     {
-        var myGroup = context.AddGroup(emenu2Permissions.GroupName);
-        //Define your own permissions here. Example:
-       //   myGroup.AddPermission(emenu2Permissions.MyPermission1, L("Permission:ProductStore_Author_Create"));
-          myGroup.AddPermission("ProductStore_Author_Create");
+      //  var emenuGroub = context.AddGroup(emenu2Permissions.GroupName);
+
+        var productGroup = context.AddGroup("ProductStore");
+
+        var productPermession = productGroup.AddPermission("Product_Management");
+
+        productPermession.AddChild("ProductStore_Create_Product");
+        productPermession.AddChild("ProductStore_Edit_Product");
+        productPermession.AddChild("ProductStore_Delete_Product");
     }
 
     private static LocalizableString L(string name)

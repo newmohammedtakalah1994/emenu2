@@ -21,7 +21,7 @@ using emenu2.Localization;
 
 namespace emenu2.Application.Services
 {
-    [Authorize]
+    [Authorize("Product_Management")]
     public class ProductService : CrudAppService<Product, ProductDto, Guid, FilterPagedProductDto, CreateUpdateProductDto>
     {
         private readonly IStringLocalizer<emenu2Resource> _localizer;
@@ -33,7 +33,8 @@ namespace emenu2.Application.Services
             _localizer = localizer;
         }
 
-        // [Authorize("ProductStore_Author_Create")]
+
+        [Authorize("ProductStore_Edit_Product")]
         public override async Task<ProductDto> UpdateAsync(Guid id, CreateUpdateProductDto input)
         {
             await CheckUpdatePolicyAsync();
@@ -52,8 +53,8 @@ namespace emenu2.Application.Services
             return await MapToGetOutputDtoAsync(entity);
         }
 
-       
-        [AllowAnonymous]
+
+        [Authorize("ProductStore_Create_Product")]
         public override async Task<ProductDto> CreateAsync(CreateUpdateProductDto input)
         {
 
@@ -74,6 +75,12 @@ namespace emenu2.Application.Services
             return await MapToGetOutputDtoAsync(entity);
         }
 
+        [Authorize("ProductStore_Delete_Product")]
+        public override Task DeleteAsync(Guid id)
+        {
+            return base.DeleteAsync(id);
+        }
+
         protected override IQueryable<Product> ApplyDefaultSorting(IQueryable<Product> query)
         {
             return query.OrderByDescending((Product e) => e.NameEn);
@@ -84,7 +91,7 @@ namespace emenu2.Application.Services
             return base.GetListAsync(input);
         }
 
-        [AllowAnonymous]
+
         public override Task<ProductDto> GetAsync(Guid id)
         {
             return base.GetAsync(id);
