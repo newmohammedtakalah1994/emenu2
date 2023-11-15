@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Entities.Auditing;
+using Volo.Abp.MultiTenancy;
 
 namespace emenu2.Domain.Models
 {
     // this modle to declare variant value so value will value like red , blue , small
-    public class VariantValue : FullAuditedEntity<Guid>
+    public class VariantValue : FullAuditedEntity<Guid>, IMultiTenant
     {
-      //  public int Id { get; set; }
+        public Guid? TenantId { get; set; }
+        //  public int Id { get; set; }
         public string? ValueEn { get; set; }
         public string? ValueAr { get; set; }
 

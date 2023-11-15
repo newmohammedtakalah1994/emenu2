@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.EntityFrameworkCore;
 using emenu2.EntityFrameworkCore;
@@ -12,9 +13,11 @@ using emenu2.EntityFrameworkCore;
 namespace emenu2.Migrations
 {
     [DbContext(typeof(emenu2DbContext))]
-    partial class emenu2DbContextModelSnapshot : ModelSnapshot
+    [Migration("20231115120202_add-teanent")]
+    partial class addteanent
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
