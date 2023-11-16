@@ -86,9 +86,34 @@ namespace emenu2.Application.Services
             return query.OrderByDescending((Product e) => e.NameEn);
         }
 
-        public override Task<PagedResultDto<ProductDto>> GetListAsync(FilterPagedProductDto input)
+        public override async Task<PagedResultDto<ProductDto>> GetListAsync(FilterPagedProductDto input)
         {
-            return base.GetListAsync(input);
+            await CheckGetListPolicyAsync();
+
+            var query = await CreateFilteredQueryAsync(input);
+            var totalCount = await AsyncExecuter.CountAsync(query);
+
+            var entities = new List<Product>();
+            var entityDtos = new List<ProductDto>();
+
+            if (totalCount > 0)
+            {
+                query = ApplySorting(query, input);
+                query = ApplyPaging(query, input);
+
+                query = await (Repository as IProductRepository).AddDetailsAsync(query);
+
+               
+
+                entities = await AsyncExecuter.ToListAsync(query);
+                entityDtos = await MapToGetListOutputDtosAsync(entities);
+            }
+
+            return new PagedResultDto<ProductDto>(
+                totalCount,
+                entityDtos
+            );
+
         }
 
 

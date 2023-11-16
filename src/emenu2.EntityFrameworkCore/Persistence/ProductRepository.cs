@@ -18,12 +18,29 @@ namespace emenu2.Persistence
         public ProductRepository(IDbContextProvider<emenu2DbContext> dbContextProvider) : base(dbContextProvider)
         {
         }
-
-
-        public override Task<IQueryable<Product>> WithDetailsAsync()
+        public override async Task<IQueryable<Product>> WithDetailsAsync()
         {
-            IQueryable<Product> query = GetQueryableAsync().Result;
+            IQueryable<Product> query = await GetQueryableAsync();
 
+            query = await AddDetailsAsync(query);
+
+            /*query = query.Include(p => p.ProductVariants)
+                                    .ThenInclude(pv => pv.ProductDetails)
+                                    .ThenInclude(pa => pa.VariantValue)
+                             .Include(p => p.ProductVariants)
+                                    .ThenInclude(pv => pv.ProductVariantImages)
+                                    .ThenInclude(pvi => pvi.Image)
+                            .Include(c => c.Image)
+                             .Include(p => p.ProductImages)
+                                    .ThenInclude(pi => pi.Image);*/
+            return query;
+
+            //return base.WithDetailsAsync();
+        }
+
+
+        public  async Task<IQueryable<Product>> AddDetailsAsync(IQueryable<Product> query)
+        {
             query = query.Include(p => p.ProductVariants)
                                     .ThenInclude(pv => pv.ProductDetails)
                                     .ThenInclude(pa => pa.VariantValue)
@@ -33,7 +50,7 @@ namespace emenu2.Persistence
                             .Include(c => c.Image)
                              .Include(p => p.ProductImages)
                                     .ThenInclude(pi => pi.Image);
-            return Task.FromResult(query);
+            return query;
 
             //return base.WithDetailsAsync();
         }
