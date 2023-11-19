@@ -37,42 +37,27 @@ namespace emenu2.Application.Services
         [Authorize("ProductStore_Edit_Product")]
         public override async Task<ProductDto> UpdateAsync(Guid id, CreateUpdateProductDto input)
         {
-            await CheckUpdatePolicyAsync();
-
+           
             if (input.NameAr.IsNullOrWhiteSpace() && input.NameEn.IsNullOrWhiteSpace())
             {
                 var strExceptionNameEmpty = _localizer["exceptionNameEmpty"];
                 throw new BusinessException(strExceptionNameEmpty);
             }
                
-            var entity = await GetEntityByIdAsync(id);
-            //TODO: Check if input has id different than given id and normalize if it's default value, throw ex otherwise
-            await MapToEntityAsync(input, entity);
-            await Repository.UpdateAsync(entity, autoSave: true);
-
-            return await MapToGetOutputDtoAsync(entity);
+            return await base.UpdateAsync(id,input);
         }
 
 
         [Authorize("ProductStore_Create_Product")]
         public override async Task<ProductDto> CreateAsync(CreateUpdateProductDto input)
         {
-
-            await CheckCreatePolicyAsync();
-
-            var entity = await MapToEntityAsync(input);
-
             if (input.NameAr.IsNullOrWhiteSpace() && input.NameEn.IsNullOrWhiteSpace())
             {
                 var strExceptionNameEmpty = _localizer["exceptionNameEmpty"];
                 throw new BusinessException(strExceptionNameEmpty);
             }
 
-            TryToSetTenantId(entity);
-
-            await Repository.InsertAsync(entity, autoSave: true);
-
-            return await MapToGetOutputDtoAsync(entity);
+            return await base.CreateAsync(input);
         }
 
         [Authorize("ProductStore_Delete_Product")]
