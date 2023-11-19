@@ -86,37 +86,6 @@ namespace emenu2.Application.Services
             return query.OrderByDescending((Product e) => e.NameEn);
         }
 
-        public override async Task<PagedResultDto<ProductDto>> GetListAsync(FilterPagedProductDto input)
-        {
-            await CheckGetListPolicyAsync();
-
-            var query = await CreateFilteredQueryAsync(input);
-            var totalCount = await AsyncExecuter.CountAsync(query);
-
-            var entities = new List<Product>();
-            var entityDtos = new List<ProductDto>();
-
-            if (totalCount > 0)
-            {
-                query = ApplySorting(query, input);
-                query = ApplyPaging(query, input);
-
-                query = await (Repository as IProductRepository).AddDetailsAsync(query);
-
-               
-
-                entities = await AsyncExecuter.ToListAsync(query);
-                entityDtos = await MapToGetListOutputDtosAsync(entities);
-            }
-
-            return new PagedResultDto<ProductDto>(
-                totalCount,
-                entityDtos
-            );
-
-        }
-
-
         public override Task<ProductDto> GetAsync(Guid id)
         {
             return base.GetAsync(id);
@@ -127,7 +96,10 @@ namespace emenu2.Application.Services
             IQueryable<Product> query =   await Repository.GetQueryableAsync();
             query = query.WhereIf(!input.NameEn.IsNullOrWhiteSpace(), t => t.NameEn == input.NameEn)
                 .WhereIf(!input.NameAr.IsNullOrWhiteSpace(), t => t.NameAr == input.NameAr);
-            return  query;
+
+            query = await (Repository as IProductRepository).AddDetailsAsync(query);
+
+            return query;
            // return base.CreateFilteredQueryAsync(input);
         }
 
